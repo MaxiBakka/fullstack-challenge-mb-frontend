@@ -2,7 +2,7 @@ import { useFileUploadService } from "../../../../services/api/services/files";
 import { FileEntity } from "../../../../services/api/types/file-entity";
 import HTTP_CODES_ENUM from "../../../../services/api/types/http-codes";
 import React, { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { FileRejection, useDropzone } from "react-dropzone";
 import {
   Controller,
   ControllerProps,
@@ -27,13 +27,16 @@ function PhotoInput(props: PhotoInputProps) {
   const [isLoading, setIsLoading] = useState(false);
   const fetchFileUpload = useFileUploadService();
   const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      setIsLoading(true);
-      const { status, data } = await fetchFileUpload(acceptedFiles[0]);
-      if (status === HTTP_CODES_ENUM.CREATED) {
-        onChange(data.file);
+    async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      console.log(fileRejections);
+      if (fileRejections.length == 0) {
+        setIsLoading(true);
+        const { status, data } = await fetchFileUpload(acceptedFiles[0]);
+        if (status === HTTP_CODES_ENUM.CREATED) {
+          onChange(data.file);
+        }
+        setIsLoading(false);
       }
-      setIsLoading(false);
     },
     [fetchFileUpload, onChange]
   );
@@ -70,11 +73,6 @@ function PhotoInput(props: PhotoInputProps) {
       {props?.value ? (
         <div className="relative w-24 h-24">
           <Avatar name={""} photo={props.value} />
-          {/* <img
-            src={props.value?.path}
-            alt="Uploaded photo"
-            className="w-24 h-24 rounded-full object-cover"
-          /> */}
           <div className="absolute inset-0 bg-black bg-opacity-70 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
             <Button
               onClick={removePhotoHandle}
@@ -89,13 +87,6 @@ function PhotoInput(props: PhotoInputProps) {
             aria-hidden="true"
           />
         </div>
-        // <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-        //   <img
-        //     src={props.value?.path}
-        //     alt="Uploaded photo"
-        //     className="w-24 h-24 rounded-full object-cover"
-        //   />
-        // </div>
       )}
 
       <div className="mt-4">

@@ -1,9 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import { Patient } from "../../services/api/types/patient";
-import { API_URL } from "../../services/api/config";
 import Avatar from "../UI/avatar/avatar";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 
 interface PatientCardProps {
   patient: Patient;
@@ -13,55 +11,45 @@ export default function PatientCard({ patient }: PatientCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="py-8 px-8 max-w-sm space-y-2 bg-white rounded-xl shadow-xl sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:gap-x-6">
-      <Avatar name={patient.firstName} photo={patient.photo} />
-      <div className="text-center space-y-2 sm:text-left">
-        <div className="space-y-0.5">
-          <p className="text-lg text-black font-semibold">
-            {patient.firstName} {patient.lastName}
-          </p>
+    <div className="w-80 h-auto min-w-80 min-h-48 bg-white rounded-xl shadow-xl overflow-hidden transition-all duration-300 ease-in-out">
+      <div className="p-4 space-y-4">
+        <div className="flex items-center space-x-4">
+          <Avatar name={patient.firstName} photo={patient.photo} />
+          <div className="space-y-1">
+            <p className="text-lg text-black font-semibold">
+              {patient.firstName} {patient.lastName}
+            </p>
+          </div>
         </div>
+
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+          className="w-full px-4 py-2 text-sm text-blue-600 font-semibold rounded-full border border-blue-200 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-colors duration-300 flex items-center justify-center"
+          aria-expanded={isExpanded}
         >
-          {!isExpanded ? "View More" : "View Less"}
+          <span>{isExpanded ? "View Less" : "View More"}</span>
+          {isExpanded ? (
+            <ChevronUpIcon className="w-4 h-4 ml-2" />
+          ) : (
+            <ChevronDownIcon className="w-4 h-4 ml-2" />
+          )}
         </button>
+      </div>
 
-        {isExpanded && (
-          <div className="space-y-0.5">
-            <p className="text-slate-500 font-medium">{patient.email}</p>
-            <p className="text-slate-500 font-medium">{patient.phoneNumber}</p>
-          </div>
-        )}
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isExpanded ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="p-4 space-y-2 bg-gray-50">
+          <p className="text-sm text-slate-500">
+            <span className="font-medium">Email:</span> {patient.email}
+          </p>
+          <p className="text-sm text-slate-500">
+            <span className="font-medium">Phone:</span> {patient.phoneNumber}
+          </p>
+        </div>
       </div>
     </div>
-
-    // <Card className="w-full">
-    //   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-    //     <CardTitle className="text-sm font-medium">{patient.name}</CardTitle>
-    //     <button
-    //       onClick={() => setIsExpanded(!isExpanded)}
-    //       className="text-gray-500 hover:text-gray-700"
-    //     >
-    //       {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-    //     </button>
-    //   </CardHeader>
-    //   <CardContent>
-    //     <div className="flex items-center space-x-4">
-    //       <img
-    //         src={patient.documentPhoto}
-    //         alt={`${patient.name}'s document`}
-    //         className="w-16 h-16 rounded-full object-cover"
-    //       />
-    //       {isExpanded && (
-    //         <div className="space-y-1">
-    //           <p className="text-sm text-gray-500">Phone: {patient.phoneNumber}</p>
-    //           <p className="text-sm text-gray-500">Email: {patient.email}</p>
-    //         </div>
-    //       )}
-    //     </div>
-    //   </CardContent>
-    // </Card>
   );
 }
