@@ -57,10 +57,13 @@ function App() {
                 <span>Add Patient</span>
               </Button>
             </div>
-            <div className="space-y-4 flex flex-row flex-wrap justify-start gap-6 mb-2 ">
+            <div className="flex flex-row flex-wrap justify-start gap-6 mb-2 ">
               {patients &&
-                patients.map((patient) => (
-                  <PatientCard key={patient.id} patient={patient} />
+                patients.map((patient, index) => (
+                  <PatientCard
+                    key={`${patient.id}${index}`}
+                    patient={patient}
+                  />
                 ))}
             </div>
           </>
