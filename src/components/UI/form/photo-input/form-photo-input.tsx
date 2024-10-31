@@ -1,16 +1,17 @@
-import { useFileUploadService } from "../../../../services/api/services/files"
-import { FileEntity } from "../../../../services/api/types/file-entity"
-import HTTP_CODES_ENUM from "../../../../services/api/types/http-codes"
-import React, { useCallback, useState } from "react"
-import { useDropzone } from "react-dropzone"
+import { useFileUploadService } from "../../../../services/api/services/files";
+import { FileEntity } from "../../../../services/api/types/file-entity";
+import HTTP_CODES_ENUM from "../../../../services/api/types/http-codes";
+import React, { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import {
   Controller,
   ControllerProps,
   FieldPath,
   FieldValues,
-} from "react-hook-form"
-import { XCircleIcon } from "@heroicons/react/24/outline"
-import { Button } from "../../button/button"
+} from "react-hook-form";
+import { UserCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { Button } from "../../button/button";
+import Avatar from "../../avatar/avatar";
 
 type PhotoInputProps = {
   error?: string;
@@ -20,7 +21,6 @@ type PhotoInputProps = {
   disabled?: boolean;
   testId?: string;
 };
-
 
 function PhotoInput(props: PhotoInputProps) {
   const { onChange } = props;
@@ -40,7 +40,7 @@ function PhotoInput(props: PhotoInputProps) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/jpeg': ['.jpg', '.jpeg']
+      "image/jpeg": [".jpg", ".jpeg"],
     },
     multiple: false,
     maxFiles: 1,
@@ -62,33 +62,48 @@ function PhotoInput(props: PhotoInputProps) {
     >
       {isDragActive && (
         <div className="absolute inset-0 bg-black bg-opacity-50 z-10 flex items-center justify-center">
-          <p className="text-white font-bold text-xl">Drop the image here ...</p>
+          <p className="text-white font-bold text-xl">
+            Drop the image here ...
+          </p>
         </div>
       )}
       {props?.value ? (
         <div className="relative w-24 h-24">
-          <img
+          <Avatar name={""} photo={props.value} />
+          {/* <img
             src={props.value?.path}
             alt="Uploaded photo"
             className="w-24 h-24 rounded-full object-cover"
-          />
+          /> */}
           <div className="absolute inset-0 bg-black bg-opacity-70 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-            <Button onClick={removePhotoHandle} children={<XCircleIcon className="w-10 h-10" />} />
+            <Button
+              onClick={removePhotoHandle}
+              children={<XCircleIcon className="w-10 h-10" />}
+            />
           </div>
         </div>
       ) : (
-        <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
-          <img
-            src={props.value?.path}
-            alt="Uploaded photo"
-            className="w-24 h-24 rounded-full object-cover"
+        <div className="mx-auto h-24 w-24 rounded-full sm:mx-0 sm:shrink-0 bg-gray-200 flex items-center justify-center">
+          <UserCircleIcon
+            className="h-20 w-20 text-gray-400"
+            aria-hidden="true"
           />
         </div>
+        // <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+        //   <img
+        //     src={props.value?.path}
+        //     alt="Uploaded photo"
+        //     className="w-24 h-24 rounded-full object-cover"
+        //   />
+        // </div>
       )}
 
       <div className="mt-4">
-        <Button disabled={isLoading || props.disabled} data-testid={props.testId}>
-          {isLoading ? 'Loading ...' : 'Select an image'}
+        <Button
+          disabled={isLoading || props.disabled}
+          data-testid={props.testId}
+        >
+          {isLoading ? "Loading ..." : "Select an image"}
         </Button>
         <input {...getInputProps()} />
       </div>
@@ -101,8 +116,7 @@ function PhotoInput(props: PhotoInputProps) {
         <p className="mt-2 text-sm text-red-600">{props.error}</p>
       )}
     </div>
-  )
-;
+  );
 }
 
 function FormPhotoInput<

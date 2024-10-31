@@ -18,8 +18,6 @@ export function useFileUploadService() {
     async (data: FileUploadRequest, requestConfig?: RequestConfigType) => {
       const formData = new FormData();
       formData.append("file", data);
-      console.log(import.meta.env.BASE_URL);
-      console.log(import.meta.env.VITE_API_BASE_URL)
       const response = await fetchClient(`${API_URL}/v1/files/upload`, {
         method: "POST",
         body: formData,

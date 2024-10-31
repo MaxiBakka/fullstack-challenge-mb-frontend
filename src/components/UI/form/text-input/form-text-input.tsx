@@ -1,50 +1,51 @@
-"use client"
+"use client";
 
-import React, { ChangeEvent, forwardRef } from "react"
+import React, { ChangeEvent, forwardRef } from "react";
 import {
   Controller,
   ControllerProps,
   FieldPath,
   FieldValues,
-} from "react-hook-form"
-import { cn } from "../../../../utils/class-merger"
+} from "react-hook-form";
+import { cn } from "../../../../utils/class-merger";
 
 type TextInputProps = {
-  label: string
-  type?: string
-  autoFocus?: boolean
-  disabled?: boolean
-  readOnly?: boolean
-  error?: string
-  testId?: string
-  autoComplete?: string
-  inputComponent?: React.ElementType
-  multiline?: boolean
-  minRows?: number
-  maxRows?: number
-  size?: "small" | "medium"
-}
+  label: string;
+  type?: string;
+  autoFocus?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  error?: string;
+  testId?: string;
+  autoComplete?: string;
+  inputComponent?: React.ElementType;
+  multiline?: boolean;
+  minRows?: number;
+  maxRows?: number;
+  size?: "small" | "medium";
+};
 
 const TextInput = forwardRef<
   HTMLDivElement | null,
   TextInputProps & {
-    name: string
-    value: string
+    name: string;
+    value: string;
     onChange: (
       value: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => void
-    onBlur: () => void
+    ) => void;
+    onBlur: () => void;
   }
 >(function TextInput(props, ref) {
-  const InputComponent = props.inputComponent || "input"
-  const sizeClasses = props.size === "small" ? "py-1 px-2 text-sm" : "py-2 px-3"
+  const InputComponent = props.inputComponent || "input";
+  const sizeClasses =
+    props.size === "small" ? "py-1 px-2 text-sm" : "py-2 px-3";
 
   return (
     <div ref={ref} className="w-full">
       <label
         htmlFor={props.name}
         className={cn(
-          "block text-sm font-medium mb-1",
+          "block text-sm text-left font-medium mb-1",
           props.error ? "text-red-500" : "text-gray-700",
           props.disabled && "opacity-50"
         )}
@@ -71,7 +72,7 @@ const TextInput = forwardRef<
             ? "border-red-300 focus:border-red-500 focus:ring-red-500"
             : "border-gray-300 focus:border-blue-500 focus:ring-blue-500",
           props.disabled && "bg-gray-50 opacity-50 cursor-not-allowed",
-          props.readOnly && "bg-gray-50 cursor-default",
+          props.readOnly && "bg-gray-50 cursor-default"
         )}
       />
       {props.error && (
@@ -83,12 +84,12 @@ const TextInput = forwardRef<
         </p>
       )}
     </div>
-  )
-})
+  );
+});
 
 function FormTextInput<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
   props: Pick<ControllerProps<TFieldValues, TName>, "name" | "defaultValue"> &
     TextInputProps
@@ -115,7 +116,7 @@ function FormTextInput<
         />
       )}
     />
-  )
+  );
 }
 
-export default FormTextInput
+export default FormTextInput;

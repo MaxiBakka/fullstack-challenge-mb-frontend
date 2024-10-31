@@ -16,17 +16,10 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const QueryLazyImport = createFileRoute('/query')()
 const AddPatientLazyImport = createFileRoute('/add-patient')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
-
-const QueryLazyRoute = QueryLazyImport.update({
-  id: '/query',
-  path: '/query',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/query.lazy').then((d) => d.Route))
 
 const AddPatientLazyRoute = AddPatientLazyImport.update({
   id: '/add-patient',
@@ -58,13 +51,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AddPatientLazyImport
       parentRoute: typeof rootRoute
     }
-    '/query': {
-      id: '/query'
-      path: '/query'
-      fullPath: '/query'
-      preLoaderRoute: typeof QueryLazyImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -73,41 +59,36 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/add-patient': typeof AddPatientLazyRoute
-  '/query': typeof QueryLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/add-patient': typeof AddPatientLazyRoute
-  '/query': typeof QueryLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/add-patient': typeof AddPatientLazyRoute
-  '/query': typeof QueryLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add-patient' | '/query'
+  fullPaths: '/' | '/add-patient'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add-patient' | '/query'
-  id: '__root__' | '/' | '/add-patient' | '/query'
+  to: '/' | '/add-patient'
+  id: '__root__' | '/' | '/add-patient'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AddPatientLazyRoute: typeof AddPatientLazyRoute
-  QueryLazyRoute: typeof QueryLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AddPatientLazyRoute: AddPatientLazyRoute,
-  QueryLazyRoute: QueryLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -123,8 +104,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/add-patient",
-        "/query"
+        "/add-patient"
       ]
     },
     "/": {
@@ -132,9 +112,6 @@ export const routeTree = rootRoute
     },
     "/add-patient": {
       "filePath": "add-patient.lazy.tsx"
-    },
-    "/query": {
-      "filePath": "query.lazy.tsx"
     }
   }
 }
